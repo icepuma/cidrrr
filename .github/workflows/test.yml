@@ -21,8 +21,10 @@ jobs:
       CARGO_TERM_COLOR: always
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: Swatinem/rust-cache@v2
-      - uses: taiki-e/install-action@nextest
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: nextest
       - run: cargo fmt -- --check && cargo clippy --all-targets --all-features -- -D warnings
       - run: cargo nextest run
