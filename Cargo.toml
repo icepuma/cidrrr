@@ -10,7 +10,7 @@ readme = "README.md"
 license-file = "LICENSE"
 
 [dependencies]
-clap = { version = "4.5.53", features = ["cargo", "derive"] }
+clap = { version = "4.5.56", features = ["cargo", "derive"] }
 ipnet = "2.11.0"
 serde = { version = "1.0.228", features = ["derive"] }
 
