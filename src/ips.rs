@@ -9,7 +9,7 @@ pub(crate) fn calculate_all_ips(
     cidr: &str,
     all: bool,
     danger_zone: bool,
-) -> Result<impl Iterator<Item = IpAddr>, String> {
+) -> Result<Box<dyn Iterator<Item = IpAddr>>, String> {
     let ip_net = cidr
         .parse::<IpNet>()
         .map_err(|e| format!("'{cidr}' is an invalid CIDR: {e}"))?;

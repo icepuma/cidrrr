@@ -1,45 +1,53 @@
+use std::io::{self, Write};
+use std::process::ExitCode;
+
 use clap::Parser;
-use cli::{Cli, OutputFormats};
+use cli::{Cli, OutputFormat};
 use ips::calculate_all_ips;
-use std::iter::Iterator;
 
 mod cli;
 mod ips;
 
-fn main() {
+fn main() -> ExitCode {
     let cli = Cli::parse();
 
     let cidr = &cli.cidr;
 
     match calculate_all_ips(cidr, cli.all, cli.danger_zone) {
         Ok(ips) => match cli.output {
-            OutputFormats::Csv => {
+            OutputFormat::Csv => {
                 println!("\"ips\"");
                 for ip in ips {
                     println!("\"{ip}\"");
                 }
             }
-            OutputFormats::Json => {
-                print!("[");
+            OutputFormat::Json => {
+                let stdout = io::stdout();
+                let mut writer = stdout.lock();
 
-                let mut peekable_ips = ips.peekable();
-
-                while let Some(elem) = peekable_ips.next() {
-                    if peekable_ips.peek().is_none() {
-                        print!("\"{elem}\"");
+                write!(writer, "[").unwrap();
+                let mut first = true;
+                for ip in ips {
+                    if first {
+                        first = false;
                     } else {
-                        print!("\"{elem}\",");
+                        write!(writer, ",").unwrap();
                     }
+                    write!(writer, "\"{ip}\"").unwrap();
                 }
-
-                println!("]");
+                writeln!(writer, "]").unwrap();
             }
-            OutputFormats::Plain => {
+            OutputFormat::Plain => {
                 for ip in ips {
                     println!("{ip}");
                 }
             }
         },
-        Err(err) => eprintln!("Error: {err}"),
+        Err(err) => {
+            eprintln!("Error: {err}");
+            return ExitCode::FAILURE;
+        }
     }
+
+    ExitCode::SUCCESS
 }

@@ -1,7 +1,7 @@
 use clap::{Parser, ValueEnum};
 
 #[derive(ValueEnum, Clone, Debug)]
-pub(crate) enum OutputFormats {
+pub(crate) enum OutputFormat {
     Csv,
     Json,
     Plain,
@@ -14,14 +14,14 @@ pub(crate) struct Cli {
     pub(crate) cidr: String,
 
     /// Show all IPs in CIDR block - if set to false, we only show the first and the last ip in the block
-    #[arg(short, long, default_value_t = false)]
+    #[arg(short, long)]
     pub(crate) all: bool,
 
     /// Additional toggle which has to be enabled - if set to false, we only show 2^20 (= 1.048.576) addresses
-    #[arg(long, default_value_t = false)]
+    #[arg(long)]
     pub(crate) danger_zone: bool,
 
     /// Output format
-    #[arg(short, long, value_enum, default_value_t = OutputFormats::Plain)]
-    pub(crate) output: OutputFormats,
+    #[arg(short, long, value_enum, default_value_t = OutputFormat::Plain)]
+    pub(crate) output: OutputFormat,
 }
