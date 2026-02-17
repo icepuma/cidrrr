@@ -16,12 +16,14 @@ cargo install cidrrr
 # shows the first and last IP of the block
 cidrrr 10.105.4.0/24
 
+count: 254
 10.105.4.1
 10.105.4.254
 ```
 
 ```shell
 # shows all IPs of the block as a JSON array
+# count metadata is only included in plain output
 # running the tool without "--danger-zone" will yield at most "1.048.576" addresses
 cidrrr --all --output json 10.105.4.0/24
 
